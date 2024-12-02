@@ -1,4 +1,4 @@
-package com.sanalabs.first
+package com.iontea.first
 
 import java.io.File
 import java.util.PriorityQueue
@@ -7,6 +7,26 @@ import kotlin.math.abs
 fun main() {
     partOne()
     partTwo()
+}
+
+fun partOne() {
+    val firstList = PriorityQueue<Int>()
+    val secondList = PriorityQueue<Int>()
+
+    File("input/first_input.txt").forEachLine { line ->
+        println(line)
+        val (first, second) = line.split("   ")
+        firstList.add(first.toInt())
+        secondList.add(second.toInt())
+    }
+
+
+    var totalDistance = 0
+    for (i in 0 until firstList.size) {
+        totalDistance += abs(firstList.poll() - secondList.poll())
+    }
+
+    println("Response = $totalDistance")
 }
 
 fun partTwo() {
@@ -28,24 +48,4 @@ fun partTwo() {
     }.sum()
 
     println("Result: $result")
-}
-
-fun partOne() {
-    val firstList = PriorityQueue<Int>()
-    val secondList = PriorityQueue<Int>()
-
-    File("input/first_input.txt").forEachLine { line ->
-        println(line)
-        val (first, second) = line.split("   ")
-        firstList.add(first.toInt())
-        secondList.add(second.toInt())
-    }
-
-
-    var totalDistance = 0
-    for (i in 0 until firstList.size) {
-        totalDistance += abs(firstList.poll() - secondList.poll())
-    }
-
-    println("Response = $totalDistance")
 }

@@ -1,9 +1,11 @@
+package day2
+
 import java.io.File
 import kotlin.math.abs
 
 fun main() {
-  partOne()
-  partTwo()
+  day3.partOne()
+  day3.partTwo()
 }
 
 enum class ValueChange {

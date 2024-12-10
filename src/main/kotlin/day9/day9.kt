@@ -110,20 +110,9 @@ fun partTwo() {
 
     newFileBlocks.add(file.copy(index = emptyBlock.index))
     emptyBlocks.add(Block.EmptyBlock(index = file.index, size = file.size))
-
-    val completeList = (newFileBlocks + emptyBlocks).sortedBy { it.index }
   }
 
   val completeList = (newFileBlocks + emptyBlocks).sortedBy { it.index }
-  //  println(
-  //      completeList
-  //          .map {
-  //            when (it) {
-  //              is Block.EmptyBlock -> ".".repeat(it.size.toInt())
-  //              is Block.FileBlock -> it.fileId.toString().repeat(it.size.toInt())
-  //            }
-  //          }
-  //          .joinToString(""))
 
   val sum =
       completeList

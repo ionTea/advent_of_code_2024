@@ -67,28 +67,48 @@ fun partOne() {
   }
 }
 
-fun partTwo() {
-  val input =
-      File("input/day11_input.txt").readLines().flatMap { line ->
-        line.split(" ").map { Stone.SingleStone(it) }
-      }
-
-  val repeatedValues = mutableMapOf<String, Stone>()
-  var next: List<Stone> = input.subList(0, 1)
-  for (i in 0 until 75) {
-    println("Step $i")
-    next =
-        next.flatMap {
-          val result = it.step()
-          result.flatten()
-        }
-    next.forEach { stone ->
-      repeatedValues[stone.value] = repeatedValues.getOrDefault(stone.print(), 0) + 1
-    }
-    println("Repetion: ${repeatedValues.filterValues { it > 1 }.size}")
-    println("Count: ${next.size}")
-    println("unique values: ${next.distinctBy { it.value }.size}")
+fun countStones(
+    stone: String,
+    depthRemaining: Int,
+    cache: MutableMap<Pair<String, Int>, Long>
+): Long {
+  val cached = cache[Pair(stone, depthRemaining)]
+  if (cached != null) {
+    return cached
   }
 
-  println("Count: ${next.sumOf { it.count() }}")
+  if (depthRemaining == 0) {
+    cache[Pair(stone, depthRemaining)] = 1
+    return 1
+  }
+
+  val result =
+      when {
+        stone == "0" -> {
+          countStones("1", depthRemaining - 1, cache)
+        }
+        stone.length % 2 == 0 -> {
+          val left = stone.substring(0, stone.length / 2).toLong().toString()
+          val right = stone.substring(stone.length / 2).toLong().toString()
+          countStones(left, depthRemaining - 1, cache) +
+              countStones(right, depthRemaining - 1, cache)
+        }
+        else -> {
+          countStones((stone.toLong() * 2024).toString(), depthRemaining - 1, cache)
+        }
+      }
+  cache[Pair(stone, depthRemaining)] = result
+  return result
+}
+
+fun partTwo() {
+  val input = File("input/day11_input.txt").readLines().flatMap { line -> line.split(" ") }
+
+  val cache = mutableMapOf<Pair<String, Int>, Long>()
+  var count = 0L
+  for (stone in input) {
+    count += countStones(stone, 75, cache)
+  }
+
+  println("Count: ${count}")
 }
